@@ -14,35 +14,35 @@ module.exports = {
             {
                 loader: 'babel-loader',
                 test: /\.(js|ts)x?$/,
-                exclude: /node_modules/
+                exclude: /node_modules/,
             },
             {
-                test: /\.css$/,
+                test: /\.(sass|css|scss)$/,
                 use: [
-                    "style-loader",
-                    "css-loader", // for styles
-                ],
-            },
-            {
-                test: /\.s[ac]ss$/i,
-                use: [
-                    // Creates `style` nodes from JS strings
-                    "style-loader",
-                    // Translates CSS into CommonJS
-                    "css-loader",
-                    // Compiles Sass to CSS
-                    "sass-loader",
+                    'style-loader',
+                    'css-loader',
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    require("autoprefixer")(),
+                                    require("tailwindcss")(), // Add TailwindCSS if needed
+                                ],
+                            },
+                        },
+                    },
+                    'sass-loader',
                 ],
             },
             {
                 test: /\.(jpg|png|svg)$/,
                 type: "asset/resource",
-                // ...
             },
         ],
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.jsx', '.js'], // add .tsx, .ts
+        extensions: ['.tsx', '.ts', '.jsx', '.js'], // Add .tsx, .ts
     },
     optimization: {
         minimize: true,
@@ -59,13 +59,9 @@ module.exports = {
     stats: {
         preset: 'errors-warnings',
     },
-
     devServer: {
         port: 3000,
         hot: true,
         historyApiFallback: true,
-        historyApiFallback: {
-            disableDotRule: true
-        }
-    }
+    },
 };
